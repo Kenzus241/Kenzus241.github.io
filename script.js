@@ -1,10 +1,11 @@
 const BACKGROUND_IMAGE = 'assets/background.jpg';
 
 const PROJECTS = [
-  { name:'S.D.V.T.P',         image:'assets/S.D.V.T.P.png', thumb:null, hero:null, description:'A motion design exploration of rhythm, color and visual storytelling. Art direction, animation and sound design made from scratch. (Placeholder copy — replace with your own.)', colors:['#ff9a3c','#ffd23c','#1a1a1a'], shape:'circle'   },
-  { name:'MODIBO-Music',     image:'assets/MODIBO.jpg', thumb:null, hero:null, description:'A motion design exploration of rhythm, color and visual storytelling. Art direction, animation and sound design made from scratch. (Placeholder copy — replace with your own.)', colors:['#7a5cff','#2b1d8f','#0d0d2a'], shape:'ring'     },
-  { name:'42sh',   image:'assets/42sh.png', thumb:null, hero:null, description:'A motion design exploration of rhythm, color and visual storytelling. Art direction, animation and sound design made from scratch. (Placeholder copy — replace with your own.)', colors:['#2ee6a8','#0a7a4f','#03150d'], shape:'blob'     },
-  { name:'Tardis',   image:'assets/Tardis.png', thumb:null, hero:null, description:'A motion design exploration of rhythm, color and visual storytelling. Art direction, animation and sound design made from scratch. (Placeholder copy — replace with your own.)', colors:['#2ee6a8','#0a7a4f','#03150d'], shape:'blob'     },
+  { name:'S.D.V.T.P',         image:'assets/S.D.V.T.P.png', thumb:null, hero:null, description:"Une reproduction légère et performante de l'utilitaire WizTree, développée en C pour les systèmes GNU/Linux. Ce projet permet de visualiser instantanément l'occupation de l'espace disque sous forme de Treemap interactive.", link:'https://github.com/Kenzus241/S.D.V.T.P', colors:['#ff9a3c','#ffd23c','#1a1a1a'], shape:'circle'   },
+  { name:'MODIBO-Music',     image:'assets/MODIBO.jpg', thumb:null, hero:null, description:"le but du projet MODIBO est de créer un bot discord qui lance de la musique dépendant des commande tapé par l'utilisateur", link:'https://github.com/Kenzus241/MODIBO-Music', colors:['#7a5cff','#2b1d8f','#0d0d2a'], shape:'ring'     },
+  { name:'42sh',   image:'assets/42sh.png', thumb:null, hero:null, description:"42sh est une implementation en C d'un shell Unix inspire de tcsh. Le programme lance une boucle interactive capable d'executer des commandes systeme, de gerer des builtins, des redirections, des pipes, l'historique, les alias et une partie du job control.", link:'https://github.com/Kenzus241/42sh', colors:['#2ee6a8','#0a7a4f','#03150d'], shape:'blob'     },
+  { name:'shatta-vodou',   image:'assets/shatta-vodou.png', thumb:null, hero:null, description:"shatta-vodou est un projet qui vise à créer une application de jeux de cartes entre amis. Ce dernier à pour principe de choisir une carte de départ en lançant un dé qui déterminera la carte. Àprès que la carte soit choisie, le joueur devra retrouver cette dernière dans le paquet dans lequel elle a été remise.", link:'https://github.com/Kenzus241/shatta-vodou', colors:['#2ee6a8','#0a7a4f','#03150d'], shape:'blob'     },
+  { name:'Tardis',   image:'assets/Tardis.png', thumb:null, hero:null, description:"Dans le cadre du nouveau service d'analyse de données de la SNCF, le projet TARDIS vise à améliorer l'efficacité du transport ferroviaire. L'objectif est d'analyser les données historiques relatives aux retards afin de développer un modèle prédictif capable d'anticiper les perturbations avant qu'elles ne se produisent. Le résultat final est un tableau de bord interactif destiné à des milliers de voyageurs afin de les aider à mieux planifier leurs trajets.", link:'https://github.com/Kenzus241/Tardis', colors:['#2ee6a8','#0a7a4f','#03150d'], shape:'blob'     },
 ];
 
 if (BACKGROUND_IMAGE){
@@ -90,6 +91,7 @@ const ASSETS = PROJECTS.map((p, i) => {
 
 const app      = document.getElementById('app');
 const canvas   = document.getElementById('webgl');
+const spotlight = document.getElementById('spotlight');
 const renderer = new THREE.WebGLRenderer({ canvas, antialias:true, alpha:true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 
@@ -194,7 +196,7 @@ PROJECTS.forEach((p, i) => {
 let scrollTarget = 0, scrollCurrent = 0, velocity = 0;
 let lastInputAt = 0;
 addEventListener('wheel', e => {
-  if (projectOpen || menuOpen) return;
+  if (!experienceMode || projectOpen || menuOpen) return;
   scrollTarget += e.deltaY * 0.0019;
   lastInputAt = performance.now();
 }, { passive:true });
@@ -202,7 +204,7 @@ addEventListener('wheel', e => {
 let touchY = null;
 addEventListener('touchstart', e => { touchY = e.touches[0].clientY; }, { passive:true });
 addEventListener('touchmove', e => {
-  if (touchY === null || projectOpen || menuOpen) return;
+  if (!experienceMode || touchY === null || projectOpen || menuOpen) return;
   scrollTarget += (touchY - e.touches[0].clientY) * 0.0045;
   touchY = e.touches[0].clientY;
   lastInputAt = performance.now();
@@ -253,7 +255,7 @@ addEventListener('pointermove', e => {
 });
 
 function updateHover(){
-  if (!entered || isList || menuOpen || projectOpen || panelOpen){ hovered = null; tooltip.classList.remove('is-visible'); return; }
+  if (!entered || !experienceMode || isList || menuOpen || projectOpen || panelOpen){ hovered = null; tooltip.classList.remove('is-visible'); return; }
   raycaster.setFromCamera(pointer, camera);
   const hits = raycaster.intersectObjects(cards)
     .filter(h => Math.abs(h.object.userData.angle) < 1.35 && h.object.material.uniforms.uAlpha.value > .5);
@@ -270,7 +272,7 @@ function updateHover(){
 }
 
 canvas.addEventListener('click', () => {
-  if (hovered && entered && !isList) openProject(hovered.userData.index);
+  if (hovered && entered && experienceMode && !isList) openProject(hovered.userData.index);
 });
 
 function resize(){
@@ -285,7 +287,7 @@ resize();
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 function tick(now){
 
-  if (!reduceMotion && entered && !isList && !menuOpen && !projectOpen && !panelOpen && now - lastInputAt > 2600)
+  if (!reduceMotion && entered && experienceMode && !isList && !menuOpen && !projectOpen && !panelOpen && now - lastInputAt > 2600)
     scrollTarget += 0.0011;
 
   const prev = scrollCurrent;
@@ -329,11 +331,22 @@ function setSound(on){
 soundBtn.addEventListener('click', () => setSound(!soundOn));
 
 let entered = false;
+let experienceMode = false;
 const intro = document.getElementById('intro');
+function setExperienceMode(open){
+  experienceMode = open;
+  app.classList.toggle('is-experience', open);
+  if (!open){
+    setView(false);
+    tooltip.classList.remove('is-visible');
+    hovered = null;
+  }
+}
 function enter(withSound){
   entered = true;
   intro.classList.add('is-hidden');
   app.classList.add('is-entered');
+  setExperienceMode(false);
   if (withSound) setSound(true);
 
   scrollTarget += 1.4;
@@ -368,12 +381,33 @@ document.getElementById('menu-open').addEventListener('click', () => setMenu(tru
 document.getElementById('menu-close').addEventListener('click', () => setMenu(false));
 menu.querySelectorAll('[data-close]').forEach(a =>
   a.addEventListener('click', e => { e.preventDefault(); setMenu(false); }));
+document.querySelectorAll('[data-experience-open]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    closePanels();
+    setMenu(false);
+    setExperienceMode(true);
+  });
+});
+document.querySelectorAll('[data-home]').forEach(el => {
+  el.addEventListener('click', e => {
+    e.preventDefault();
+    closePanels();
+    setMenu(false);
+    setExperienceMode(false);
+  });
+});
+document.getElementById('experience-close').addEventListener('click', () => {
+  closePanels();
+  setExperienceMode(false);
+});
 
 let panelOpen = false;
 const panels = document.querySelectorAll('.panel');
 function openPanel(id){
   const panel = document.getElementById(id);
   if (!panel) return;
+  setExperienceMode(false);
   panelOpen = true;
   panels.forEach(p => p.classList.toggle('is-open', p === panel));
   setMenu(false);
@@ -401,11 +435,15 @@ const project   = document.getElementById('project');
 const projHero  = document.getElementById('proj-hero');
 const projTitle = document.getElementById('proj-title');
 const projDesc  = document.getElementById('proj-desc');
+const projLink  = document.getElementById('proj-link');
 function openProject(i){
   closePanels();
+  setExperienceMode(true);
   projectOpen = true;
   projTitle.textContent = PROJECTS[i].name;
   projDesc.textContent  = PROJECTS[i].description;
+  projLink.hidden = !PROJECTS[i].link;
+  if (PROJECTS[i].link) projLink.href = PROJECTS[i].link;
   projHero.style.backgroundImage = 'url(' + ASSETS[i].heroURL + ')';
   project.classList.add('is-open');
   tooltip.classList.remove('is-visible');
@@ -418,7 +456,14 @@ document.getElementById('proj-close').addEventListener('click', () => {
 addEventListener('keydown', e => {
   if (e.key === 'Escape'){
     setMenu(false);
-    closePanels();
-    if (projectOpen){ projectOpen = false; project.classList.remove('is-open'); }
+    if (projectOpen){
+      projectOpen = false;
+      project.classList.remove('is-open');
+      project.scrollTop = 0;
+    } else if (panelOpen){
+      closePanels();
+    } else if (experienceMode){
+      setExperienceMode(false);
+    }
   }
 });

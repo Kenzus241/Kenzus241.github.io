@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bernes-NDOUSSY.com</title>
+<link rel="icon" type="image/png" href="assets/logo.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
@@ -38,6 +39,8 @@
     <button id="btn-list">liste</button>
   </div>
 
+  <button class="ui experience-close" id="experience-close">résumé <span class="dot"></span></button>
+
   
   <div class="tooltip" id="tooltip"><img id="tooltip-img" alt=""><span id="tooltip-name"></span></div>
 
@@ -51,16 +54,16 @@
       <button class="close-btn" id="menu-close">✕</button>
     </div>
     <nav>
-      <a href="#" data-close>Projets</a>
-      <a href="#" data-panel="resume">Résumé</a>
+      <a href="#" data-experience-open>Projets</a>
+      <a href="#" data-home>Résumé</a>
       <a href="#" data-close>contacte</a>
     </nav>
     <div class="menu-foot">
       <a class="mail" href="mailto:ndoussybernes@gmail.com">ndoussybernes@gmail.com</a>
       <div class="socials">
         <a href="https://www.instagram.com/__kenzus__/" aria-label="instagram">ig</a>
-        <a href="https://github.com/Kenzus241" aria-label="Git">Git</a>
-        <a href="https://www.linkedin.com/in/bernes-n-304b95354/" aria-label="linkedin">in</a>
+        <a href="https://github.com/Kenzus241" aria-label="Git">Github</a>
+        <a href="https://www.linkedin.com/in/bernes-ndoussy" aria-label="linkedin">in</a>
       </div>
     </div>
   </aside>
@@ -73,41 +76,88 @@
       <h2 id="proj-title">Project</h2>
       <div class="proj-info">
         <p id="proj-desc"></p>
-        <button class="pill-btn">see the case <span class="dot"></span></button>
+        <a class="pill-btn proj-link" id="proj-link" target="_blank" rel="noopener noreferrer">
+          Voir le projet <span class="dot"></span>
+        </a>
       </div>
     </div>
   </section>
 
-  <section id="resume" class="panel" aria-labelledby="resume-title">
-    <button class="panel-close" data-close-panel aria-label="fermer">✕</button>
+  <section id="resume" class="main-view" aria-labelledby="resume-title">
     <div class="panel-body">
       <p class="panel-kicker">Profil</p>
       <h2 id="resume-title">Résumé</h2>
       <p class="panel-lead">
+        Bernes NDOUSSY
         Etudiant à EPITECH, je suis un développeur passionné par les défis technique et les domaines de la data et de l'ia
       </p>
 
       <div class="resume-grid">
         <article>
           <span>01</span>
-          <h3>Compétences</h3>
+          <h3><button type="button" data-panel="skills">Compétences</button></h3>
           <p>HTML, CSS, JavaScript, Python, C, Typescript.</p>
         </article>
         <article>
           <span>02</span>
-          <h3>Expérience</h3>
-          <p>Création de portfolios, projets interactifs, prototypes front-end et identités web.</p>
+          <h3><button type="button" data-experience-open>Expérience</button></h3>
+          <p>Création de portfolios, créations de logiciel système, Création de Bot musical compelt ...</p>
         </article>
         <article>
           <span>03</span>
-          <h3>Loisirs</h3>
+          <h3><button type="button" data-panel="hobbies">Loisirs</button></h3>
           <p>BasketBall, course à pied, jeux vidéos, écouter de la musique(en faire parfois...) et profiter de la vie.</p>
         </article>
         <article>
           <span>04</span>
-          <h3>Objectif</h3>
-          <p>Construire des expériences numériques qui mélangent technique, direction artistique et clarté.</p>
+          <h3><button type="button" data-panel="goal">Objectif</button></h3>
+          <p>Construire des expériences numériques qui puisse aider le plus grand nombre de personne.</p>
         </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" class="panel detail-panel" aria-labelledby="skills-title">
+    <button class="panel-close" data-close-panel aria-label="fermer">✕</button>
+    <div class="panel-body">
+      <p class="panel-kicker">Résumé / 01</p>
+      <h2 id="skills-title">Compétences</h2>
+      <p class="panel-lead">
+        Je travaille principalement avec HTML, CSS, JavaScript, Python, C et Typescript.
+      </p>
+      <div class="detail-list">
+        <p>Front-end: interfaces responsive, intégration propre.</p>
+        <p>Back/data: bases solides en Python, logique algorithmique et expérimentation IA.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="hobbies" class="panel detail-panel" aria-labelledby="hobbies-title">
+    <button class="panel-close" data-close-panel aria-label="fermer">✕</button>
+    <div class="panel-body">
+      <p class="panel-kicker">Résumé / 03</p>
+      <h2 id="hobbies-title">Loisirs</h2>
+      <p class="panel-lead">
+        Basket-ball, course à pied, jeux vidéo, musique et tout ce qui nourrit l'énergie créative.
+      </p>
+      <div class="detail-list">
+        <p>Le sport m'aide à garder le rythme et la discipline. </br>  </br> -> Basket-ball: Club pendant 1 an et praticque en amateur </br>  </br> -> Course à pied: préparation d'un marathon </br>  </br> -> Jeux vidéos: pratique amateur de principalement Fortnite, Fallout et Minecraft </br>  </br> -> Musique: artiste préférés Maitre Gims et Michael Jackson</p>
+        <p>La musique et les jeux vidéo nourrissent mon goût pour les ambiances fortes.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="goal" class="panel detail-panel" aria-labelledby="goal-title">
+    <button class="panel-close" data-close-panel aria-label="fermer">✕</button>
+    <div class="panel-body">
+      <p class="panel-kicker">Résumé / 04</p>
+      <h2 id="goal-title">Objectif</h2>
+      <p class="panel-lead">
+        Construire des expériences numériques utiles, fluides et marquées par une vraie direction artistique.
+      </p>
+      <div class="detail-list">
+        <p>Continuer à progresser en développement web, data et IA.</p>
+        <p>Mélanger technique, esthétique et clarté dans des projets ambitieux.</p>
       </div>
     </div>
   </section>
